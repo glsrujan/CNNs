@@ -30,3 +30,8 @@ Introduction to Convolution Neural Networks
 |
 └── src                <- Source code for use in this project.
 ```
+
+# Findings
+
+ - Binary Cross entropy with logits loss with a CNN Resnet8 architecture, while the train Accuracy reached 99%, validation accuracy was bad. Model did not learn to classify a simple image with with circle of rectangle.
+ 

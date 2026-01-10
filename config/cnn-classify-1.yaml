@@ -1,3 +1,5 @@
 lr: 1e-4
-epochs: 5
-dataset: "cnn/data/synthetic"
+epochs: 20
+dataset: "data/synthetic"
+modelsavepath: "models/cnn-classify-2"
+# loadModel : "models/cnn-classify-1/checkpoint_epoch4.pth"
