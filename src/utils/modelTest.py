@@ -17,7 +17,7 @@ def infer(model, data, gtLabel):
         out = model(data)
         out = torch.sigmoid(out)
     print(out,gtLabel)
-    
+    return out
 if __name__ == "__main__":
     model = BCmodel(3,16)
     state_dict = torch.load("models/cnn-classify-4/checkpoint_epoch45.pth")
@@ -30,10 +30,11 @@ if __name__ == "__main__":
     # config["fgColor"] = (255,255,255)
     model.eval()
     
-    for iter in range(10):
+    for iter in range(50):
         circle.createShape(config)
-        # plt.imshow(circle.image)
-        # plt.show()
-        infer(model,circle.image,0)
+        pred = infer(model,circle.image,0)
         rectangle.createShape(config)
-        infer(model,rectangle.image,1)
+        pred = infer(model,rectangle.image,1)
+        plt.title(f"GT Label = {1}, Model Pred = {pred.item()}")
+        plt.imshow(rectangle.image)
+        plt.show()
