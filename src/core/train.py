@@ -1,6 +1,6 @@
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, random_split
-from backbone import CNNBackbone
+from src.core.backbone import BCmodel
 from torch import nn, optim
 import torch
 import wandb
@@ -10,7 +10,11 @@ import yaml
 with open("config/cnn-classify-1.yaml", "r") as f:
     trainingCofig = yaml.safe_load(f)
     
-transform = transforms.ToTensor()
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.5, 0.5, 0.5],
+                         std=[0.5, 0.5, 0.5])
+])
 
 dataset = datasets.ImageFolder(
     root=trainingCofig["dataset"],
@@ -23,25 +27,14 @@ valSize = datasetSize - trainSize
 
 trainData, valData = random_split(dataset,[trainSize,valSize])
 
-trainLoader = DataLoader(trainData,batch_size=64,shuffle=True)
-valLoader = DataLoader(valData,batch_size=64,shuffle=False)
-
-class BCmodel(nn.Module):
-    def __init__(self, in_channels, features):
-        super().__init__()
-        self.encoder = CNNBackbone(in_channels, features)
-        self.norm = nn.BatchNorm1d(features)
-        self.classifier = nn.Linear(features, 1)
-
-    def forward(self, x):
-        x = self.encoder(x)
-        x = self.norm(x)
-        x = self.classifier(x)
-        return x
+trainLoader = DataLoader(trainData,batch_size=128,shuffle=True)
+valLoader = DataLoader(valData,batch_size=128,shuffle=False)
 
 
 
-# wandb stuff
+
+
+# # wandb stuff
 run = wandb.init(
     # Set the wandb entity where your project will be logged (generally your team name).
     entity="dammu",
@@ -69,31 +62,29 @@ for epoch in range(trainingCofig["epochs"]):
     
     model.train()
     for batch_idx, (images, labels) in enumerate(trainLoader):
-        labels = labels.float().unsqueeze(1)
-        output = model(images)
+        labels = labels.float()
+        output = model(images).squeeze()
         loss = criterion(output,labels)
-        # print(output.shape,labels.shape, loss.item())
-        # quit()
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
         epoch_loss_train += loss.item()
         batch_acc_train = torch.sum(labels.int() == (torch.sigmoid(output)>0.5).int())/len(output)
-        print(f"Batch Loss train = {loss.item()}, batch Accuracy train= {batch_acc_train}")
-        wandb.log({"loss_train": loss.item(),"Test Accuracy":batch_acc_train})
+        print(f"Batch Loss train = {loss.item()}, batch Accuracy train = {batch_acc_train}")
+        wandb.log({"loss_train": loss.item(),"Train Accuracy":batch_acc_train})
     print(f"Epoch = {epoch}, Epoch Loss train= {epoch_loss_train/len(trainLoader)}")
     
     epoch_loss_val = 0.0
     model.eval()
     for batch_idx, (images, labels) in enumerate(valLoader):
-        labels = labels.float().unsqueeze(1)
+        labels = labels.float()
         with torch.no_grad():
-            output = model(images)
+            output = model(images).squeeze()
             loss = criterion(output,labels)
         epoch_loss_val+=loss.item()
         batch_acc_val = torch.sum(labels.int() == (torch.sigmoid(output)>0.5).int())/len(output)
         wandb.log({"loss_val": loss.item(),"Val Accuracy":batch_acc_val})
-        print(f"Batch Loss train = {loss.item()}, batch Accuracy train= {batch_acc_val}")
+        print(f"Batch Loss train = {loss.item()}, batch Accuracy Val = {batch_acc_val}")
         pass
     torch.save({
         "epoch": epoch,
