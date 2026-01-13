@@ -44,7 +44,7 @@ Generated colored synthetic images, circles had varying radius
 Decent performance, reached Validation accuracy of 98% - 99%.
 
 **Observation**
-* Images are 64x64, so circles with 1 px radius looks almost similar to a rectangle due to quantisation, or the ones that are closer to the image boundary. The softmax values for these are very close to the decision boundry or sometimes wrongly classified.
+* Images are 64x64, so circles with 1 px radius looks almost similar to a rectangle due to quantisation, or the ones that are closer to the image boundary. The sigmoid values for these are very close to the decision boundry or sometimes wrongly classified.
 
 <p align="center"> <table> <tr> <td align="center"> <img src="docs/resnet8/colored/wrongPred_C.png" width="220"><br> <sub>Wrong Prediction</sub> </td> <td align="center"> <img src="docs/resnet8/colored/LowConfidencePred_R.png" width="212"><br> <sub>Low Confidence Prediction</sub> </td> </tr> </table> </p>
 
