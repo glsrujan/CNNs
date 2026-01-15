@@ -1,0 +1,7 @@
+lr: 5e-4
+epochs: 20
+dataset: "data/synthetic_1"
+modelsavepath: "/Users/srujan/Documents/workspace/Projects/Learning26/ComputerVision/CNNs/models/resnet-classify-2"
+batchsize: 128
+trainDataSplit: 0.7
+# loadModel : "models/cnn-classify-1/checkpoint_epoch4.pth"

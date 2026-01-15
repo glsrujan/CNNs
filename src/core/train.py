@@ -1,13 +1,13 @@
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, random_split
-from src.core.backbone import BCmodel
+from backbone import Resnet4Classifier
 from torch import nn, optim
 import torch
 import wandb
 import yaml
 
 # Training Config
-with open("config/cnn-classify-1.yaml", "r") as f:
+with open("config/resnet-classify-1.yaml", "r") as f:
     trainingCofig = yaml.safe_load(f)
     
 transform = transforms.Compose([
@@ -39,17 +39,17 @@ run = wandb.init(
     # Set the wandb entity where your project will be logged (generally your team name).
     entity="dammu",
     # Set the wandb project where this run will be logged.
-    project="cnn-classify-1",
+    project="resnet-classify-1",
     # Track hyperparameters and run metadata.
     config={
         "learning_rate": float(trainingCofig["lr"]),
-        "architecture": "CNN",
+        "architecture": "RESNET4",
         "dataset": trainingCofig["dataset"],
         "epochs": trainingCofig["epochs"],
     },
 )
 
-model = BCmodel(3,16)
+model = Resnet4Classifier(3,16,1)
 if "loadModel" in trainingCofig.keys() and trainingCofig["loadModel"]:
     state_dict = torch.load(trainingCofig["loadModel"])
     model.load_state_dict(state_dict)
