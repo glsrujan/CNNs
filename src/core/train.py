@@ -1,6 +1,6 @@
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, random_split
-from backbone import Resnet4Classifier
+from backbone import Resnet4Classifier, BCmodel
 from torch import nn, optim
 import torch
 import wandb

@@ -8,6 +8,15 @@ class CNNBackbone(nn.Module):
         self.in_channels = in_channels
         self.out_channels = out_channels
         
+        # self.model = nn.Sequential(
+        #             nn.Conv2d(in_channels,8,(3,3),1,1),
+        #             nn.BatchNorm2d(8),
+        #             nn.ReLU(),
+        #             nn.MaxPool2d(2),
+        #             nn.Conv2d(8,self.out_channels,(3,3),1,1),
+        #             nn.BatchNorm2d(self.out_channels),
+        #             nn.ReLU(),
+        #         )
         self.model = nn.Sequential(
                     nn.Conv2d(in_channels,8,(3,3),1,1),
                     nn.BatchNorm2d(8),
@@ -17,7 +26,6 @@ class CNNBackbone(nn.Module):
                     nn.BatchNorm2d(self.out_channels),
                     nn.ReLU(),
                 )
-        
     def forward(self,x):
         return self.model.forward(x)
 
@@ -41,14 +49,17 @@ class resnet4(nn.Module):
         return self.backbone(x)
 
 class BCmodel(nn.Module):
-    def __init__(self, in_channels, features):
+    def __init__(self, in_channels, out_channels, nc,):
         super().__init__()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.nc = nc
         self.model = nn.Sequential(
-            CNNBackbone(in_channels, features),
+            CNNBackbone(self.in_channels, self.out_channels),
             nn.AdaptiveAvgPool2d((1,1)),
             nn.Flatten(),
             nn.Dropout(0.5),
-            nn.Linear(features, 1)
+            nn.Linear(self.out_channels, self.nc)
         )
 
     def forward(self, x):

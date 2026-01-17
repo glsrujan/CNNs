@@ -11,6 +11,10 @@ Model architecture is as shown below.
 <p align="center"><strong>cnn v resnet4</strong></p>
 <p align="center"><img src="cnn_v_resnet.png" width="480"></p>
 
-**Observation**: The learning rate in both trainings was set to `5e-4`. The primary difference appears to be the number of convolutional operations: ResNet-4 has more convolutions, and consequently more activations. In principle, for shallow networks, ResNets and vanilla CNNs should not differ significantly. However, we observe a substantial performance gap between the two.
+**Observation**: The learning rate in both the trainings was set to `5e-4`. The primary difference appears to be the number of convolutional operations: ResNet-4 has more convolutions, and consequently more activations. In principle, for shallow networks, ResNets and vanilla CNNs should not differ significantly. However, we observe a substantial performance gap between the two.
 
-**Next Steps:** Retrain CNN with the same number of convoution operations as that of the resnet4 and compare the results.
+**Next Steps:** Retrain CNN with the same number of convoution operations as that of the resnet4 keeping the architecture pretty much the same except the skip connection.
+
+## Resnet4 v CNN4
+As expected, the performance difference between the two shallow network architectures is not significant.
+<p align="center"><img src="resnet4vcnn4.png" width="480"></p>
