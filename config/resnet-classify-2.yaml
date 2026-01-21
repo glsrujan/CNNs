@@ -1,0 +1,10 @@
+# Multinomial (catagorical cross entropy)
+lr: 1e-3
+epochs: 20
+dataset: "data/synthetic_2"
+seed: 77
+modelsavepath: "/Users/srujan/Documents/workspace/Projects/Learning26/ComputerVision/CNNs/models/resnet-classify-3"
+batchsize: 64
+trainDataSplit: 0.7
+
+# loadModel : "models/cnn-classify-1/checkpoint_epoch4.pth"

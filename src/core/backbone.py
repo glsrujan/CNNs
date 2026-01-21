@@ -1,6 +1,8 @@
 import torch
 from torch import nn
-from base import Resblock
+from core.base import Resblock
+# from base import Resblock
+
 
 class CNNBackbone(nn.Module):
     def __init__(self,in_channels, out_channels,bocks = 4, *args, **kwargs):
